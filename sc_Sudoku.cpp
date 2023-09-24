@@ -1,14 +1,15 @@
 #include <iostream>
-#include <chrono> // Untuk mengukur waktu
+#include <chrono>
 using namespace std;
 
-const int N = 9;
+const int N = 9; // Ukuran matriks Sudoku
 
 // Fungsi untuk mencetak matriks Sudoku
 void cetakSudoku(int sudoku[N][N]) {
+    cout << "-----------------------" << endl;
     for (int i = 0; i < N; i++) {
         if (i % 3 == 0 && i != 0)
-            cout << "---------------------" << endl;
+            cout << "-----------------------" << endl;
         for (int j = 0; j < N; j++) {
             if (j % 3 == 0 && j != 0)
                 cout << " | ";
@@ -16,7 +17,9 @@ void cetakSudoku(int sudoku[N][N]) {
         }
         cout << endl;
     }
+    cout << "-----------------------" << endl;
 }
+
 
 // Fungsi untuk memeriksa apakah angka yang akan diisi valid pada posisi tertentu
 bool isSafe(int sudoku[N][N], int row, int col, int num) {
@@ -80,37 +83,36 @@ bool solveSudoku(int sudoku[N][N], int &perulangan) {
             sudoku[row][col] = 0;
         }
     }
-
+    
     return false;
 }
 
 int main() {
     int sudoku[N][N];
 
-    cout << "Masukkan matriks Sudoku (isi sel kosong dengan 0):" << endl;
+    cout << "\nMasukkan Matriks Sudoku (isi sel kosong dengan 0):" << endl;
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             cin >> sudoku[i][j];
         }
     }
 
-    int perulangan = 0; // Inisialisasi jumlah iterasi
-    auto WaktuMulai = chrono::high_resolution_clock::now(); // Waktu mulai eksekusi
+    int perulangan = 0;
+    auto WaktuMulai = chrono::high_resolution_clock::now();
 
     // Cari solusi Sudoku
     if (solveSudoku(sudoku, perulangan)) {
-        // Cetak solusi
         cout << "\nSolusi Sudoku:" << endl;
         cetakSudoku(sudoku);
     } else {
-        cout << "\nTidak ada solusi yang ditemukan." << endl;
+        cout << "\nTidak ada solusi yang ditemukan :(" << endl;
     }
 
-    auto WaktuSelesai = chrono::high_resolution_clock::now(); // Waktu akhir eksekusi
-    auto duration = chrono::duration_cast<chrono::microseconds>(WaktuSelesai - WaktuMulai);
+    auto WaktuSelesai = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::milliseconds>(WaktuSelesai - WaktuMulai);
 
     cout << "\nJumlah iterasi: " << perulangan << endl;
-    cout << "Waktu eksekusi (microseconds): " << duration.count() << endl;
+    cout << "Waktu eksekusi (milliseconds): " << duration.count() << endl << endl;
 
     return 0;
 }
