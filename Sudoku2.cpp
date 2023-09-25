@@ -1,7 +1,8 @@
-// Input Sudoku dari user
+//Input Sudoku dari file eksternal
 
 #include <iostream>
 #include <chrono>
+#include <fstream>
 using namespace std;
 
 const int N = 9; // Ukuran matriks Sudoku
@@ -21,7 +22,6 @@ void cetakSudoku(int sudoku[N][N]) {
     }
     cout << "-----------------------" << endl;
 }
-
 
 // Fungsi untuk memeriksa apakah angka yang akan diisi valid pada posisi tertentu
 bool isSafe(int sudoku[N][N], int row, int col, int num) {
@@ -92,11 +92,24 @@ bool solveSudoku(int sudoku[N][N], int &perulangan) {
 int main() {
     int sudoku[N][N];
 
-    cout << "\nMasukkan Matriks Sudoku (isi sel kosong dengan 0):" << endl;
+    cout << "\nMasukkan nama file matriks Sudoku: ";
+    string namaFile;
+    cin >> namaFile;
+
+    ifstream inputFile(namaFile);
+
+    if (!inputFile.is_open()) {
+        cout << "Gagal membuka file " << namaFile << endl;
+        return 1;
+    }
+
+    cout << "\nMatriks Sudoku dari file " << namaFile << ":" << endl;
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
-            cin >> sudoku[i][j];
+            inputFile >> sudoku[i][j];
+            cout << sudoku[i][j] << " ";
         }
+        cout << endl;
     }
 
     int perulangan = 0;
@@ -114,7 +127,9 @@ int main() {
     auto duration = chrono::duration_cast<chrono::milliseconds>(WaktuSelesai - WaktuMulai);
 
     cout << "\nJumlah Iterasi: " << perulangan << endl;
-    cout << "Waktu Eksekusi: " << duration.count() << endl << endl;
+    cout << "Waktu Eksekusi: " << duration.count() << " ms" << endl << endl;
+
+    inputFile.close();
 
     return 0;
 }
